@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Feedback;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 
 class FeedbackController extends Controller
 {
@@ -13,11 +12,14 @@ class FeedbackController extends Controller
         return view('welcome');
     }
 
-    public function index(): Collection
+    public function index(): View
     {
-        return Feedback::query()
+        $feedbacks = Feedback::query()
+            ->select(['created_at', 'lectures_value_rating'])
             ->latest()
             ->get();
+
+        return view('feedbacks.index', compact('feedbacks'));
     }
 
     public function show(int $feedbackId): Feedback
